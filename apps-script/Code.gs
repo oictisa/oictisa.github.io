@@ -13,6 +13,12 @@ var HEADERS = ['id', 'createdAt', 'name', 'contactType', 'contact', 'studentType
   'eventTags', 'eventDetail', 'timing', 'nationality', 'lang', 'status', 'repliedAt', 'note'];
 var STATUSES = ['new', 'reviewing', 'confirmed', 'onhold'];
 
+// Spam limits
+var LIMIT_PER_CONTACT_MINUTES = 10; // same email / Instagram ID can send once per 10 min
+var LIMIT_NOTIFY_PER_HOUR = 20;     // above this, requests are saved but staff emails pause
+var LIMIT_SAVE_PER_HOUR = 60;       // above this, requests are rejected
+var KEEP_MAIL_QUOTA_FOR_REPLIES = 20; // never let notifications use the last 20 daily emails
+
 function doPost(e) {
   try {
     var body = JSON.parse(e.postData.contents);
@@ -44,7 +50,19 @@ function submit(b) {
 
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);
+  var notify = true;
   try {
+    var cache = CacheService.getScriptCache();
+    var contactKey = 'c:' + contact.toLowerCase().replace(/^@/, '');
+    if (cache.get(contactKey)) throw new Error('Too many requests');
+
+    var hourKey = 'h:' + Utilities.formatDate(new Date(), 'Asia/Tokyo', 'yyyyMMddHH');
+    var count = Number(cache.get(hourKey) || 0) + 1;
+    if (count > LIMIT_SAVE_PER_HOUR) throw new Error('Too many requests');
+    cache.put(hourKey, String(count), 3600);
+    cache.put(contactKey, '1', LIMIT_PER_CONTACT_MINUTES * 60);
+    notify = count <= LIMIT_NOTIFY_PER_HOUR;
+
     var id = Utilities.getUuid().slice(0, 8);
     var row = {
       id: id,
@@ -68,7 +86,7 @@ function submit(b) {
   } finally {
     lock.releaseLock();
   }
-  notifyStaff(row);
+  if (notify && MailApp.getRemainingDailyQuota() > KEEP_MAIL_QUOTA_FOR_REPLIES) notifyStaff(row);
   return { ok: true, id: id };
 }
 

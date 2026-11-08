@@ -63,7 +63,7 @@ export function RequestForm() {
   const [v, setV] = useState(empty)
   const [consent, setConsent] = useState(false)
   const [errors, setErrors] = useState<Errors>({})
-  const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle')
+  const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error' | 'tooMany'>('idle')
 
   const set = <K extends keyof typeof empty>(k: K, val: (typeof empty)[K]) => setV((p) => ({ ...p, [k]: val }))
 
@@ -96,8 +96,8 @@ export function RequestForm() {
       setState('done')
       setV(empty)
       setConsent(false)
-    } catch {
-      setState('error')
+    } catch (err) {
+      setState(err instanceof Error && err.message === 'Too many requests' ? 'tooMany' : 'error')
     }
   }
 
@@ -221,9 +221,9 @@ export function RequestForm() {
                   {errors.consent && <p className="mt-1 text-sm font-bold text-[#C2410C]">{errors.consent}</p>}
                 </div>
 
-                {state === 'error' && (
+                {(state === 'error' || state === 'tooMany') && (
                   <p className="rounded-2xl bg-coral/30 p-3 text-sm font-bold" role="alert">
-                    {t(f.error)}
+                    {t(state === 'tooMany' ? f.tooMany : f.error)}
                   </p>
                 )}
 

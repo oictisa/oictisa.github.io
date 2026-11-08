@@ -184,6 +184,10 @@ export const form = {
     ja: 'ありがとうございます！TISAスタッフから近日中に返信します。',
   },
   another: { en: 'Send another request', ja: 'もう一件送る' },
+  tooMany: {
+    en: 'You just sent a request. Please wait about 10 minutes before sending another one.',
+    ja: '先ほどリクエストを受け付けました。次の送信は10分ほど空けてください。',
+  },
   error: {
     en: 'Could not send. Please try again, or DM us on Instagram.',
     ja: '送信できませんでした。もう一度試すか、InstagramのDMで連絡してください。',
