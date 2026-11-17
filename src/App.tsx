@@ -1,41 +1,66 @@
-import { useEffect, useState } from 'react'
+import { useEffect, type ReactNode } from 'react'
 import { Header } from '@/components/site/Header'
 import { Hero } from '@/components/site/Hero'
 import { RequestForm } from '@/components/site/RequestForm'
-import { About, Activities, Footer, Numbers } from '@/components/site/Sections'
+import { About, Explore, Footer, RecentEvents } from '@/components/site/Sections'
 import { LangProvider } from '@/i18n'
 import { Admin } from '@/pages/Admin'
+import { EventsPage } from '@/pages/EventsPage'
+import { InsidePage } from '@/pages/InsidePage'
+import { LifePage } from '@/pages/LifePage'
+import { TeamPage } from '@/pages/TeamPage'
+import { useRoute } from '@/router'
 
-// The admin page lives at  …/#/admin  (hash routing works on GitHub Pages).
-function useIsAdmin() {
-  const [admin, setAdmin] = useState(() => location.hash.startsWith('#/admin'))
+const subPages: Record<string, () => ReactNode> = {
+  inside: InsidePage,
+  events: EventsPage,
+  life: LifePage,
+  team: TeamPage,
+}
+
+function Home() {
+  return (
+    <>
+      <Hero />
+      <About />
+      <Explore />
+      <RecentEvents />
+      <RequestForm />
+    </>
+  )
+}
+
+function Site() {
+  const { page, anchor } = useRoute()
+
+  // New page → top. "#request" style anchor → scroll to that section once it exists.
   useEffect(() => {
-    const on = () => setAdmin(location.hash.startsWith('#/admin'))
-    window.addEventListener('hashchange', on)
-    return () => window.removeEventListener('hashchange', on)
-  }, [])
-  return admin
+    if (!anchor) {
+      window.scrollTo({ top: 0 })
+      return
+    }
+    // wait a moment so the home page has laid out before jumping
+    const id = setTimeout(() => document.getElementById(anchor)?.scrollIntoView({ behavior: 'instant' as ScrollBehavior }), 80)
+    return () => clearTimeout(id)
+  }, [page, anchor])
+
+  if (page === 'admin') return <Admin />
+  const Page = subPages[page] ?? Home
+  return (
+    <>
+      <Header />
+      <main>
+        <Page />
+      </main>
+      <Footer />
+    </>
+  )
 }
 
 export default function App() {
-  const admin = useIsAdmin()
   return (
     <LangProvider>
-      {admin ? (
-        <Admin />
-      ) : (
-        <>
-          <Header />
-          <main>
-            <Hero />
-            <About />
-            <Activities />
-            <Numbers />
-            <RequestForm />
-          </main>
-          <Footer />
-        </>
-      )}
+      <Site />
     </LangProvider>
   )
 }

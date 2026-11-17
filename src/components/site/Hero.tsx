@@ -22,7 +22,7 @@ export function Hero() {
             <a href="#request" className="rounded-full bg-sun px-6 py-3 font-extrabold shadow-[0_4px_0_#1F3A5F] transition hover:-translate-y-0.5 active:translate-y-1 active:shadow-none">
               {t(hero.ctaRequest)} →
             </a>
-            <a href="#activities" className="rounded-full border-2 border-navy px-6 py-3 font-extrabold transition hover:bg-navy hover:text-white">
+            <a href="#/events" className="rounded-full border-2 border-navy px-6 py-3 font-extrabold transition hover:bg-navy hover:text-white">
               {t(hero.ctaActivities)}
             </a>
           </div>

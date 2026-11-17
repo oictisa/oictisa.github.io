@@ -16,7 +16,6 @@ export const site = {
 export const nav = {
   about: { en: 'About', ja: 'TISAとは' },
   activities: { en: 'Activities', ja: '活動' },
-  numbers: { en: 'Numbers', ja: '数字で見る' },
   request: { en: 'Request', ja: 'リクエスト' },
 } satisfies Record<string, T>
 
@@ -57,59 +56,142 @@ export const about = {
   ],
 }
 
+// ── Activities ────────────────────────────────────────────────
 // Photos: put image files in /public/photos/ and set `photo: 'photos/xxx.jpg'`.
 // While `photo` is empty, a colored card with the emoji is shown instead.
-export const activities = {
-  title: { en: 'What we do', ja: '活動内容' },
-  items: [
-    {
-      emoji: '🌸',
-      color: '#F5C518',
-      photo: '',
-      title: { en: 'Welcome events', ja: '新歓イベント' },
-      text: { en: 'Every new semester we welcome new students and help them find friends fast.', ja: '新学期ごとに新入生を歓迎。最初の友だち作りをお手伝い。' },
-    },
-    {
-      emoji: '🏕️',
-      color: '#7BC67E',
-      photo: '',
-      title: { en: 'TISA training camp', ja: 'TISA合宿' },
-      text: { en: 'An overnight trip with international and Japanese students.', ja: '留学生と日本人学生で行く泊まりがけの合宿。' },
-    },
-    {
-      emoji: '🎆',
-      color: '#5BA4E6',
-      photo: '',
-      title: { en: 'Fireworks event', ja: '花火イベント' },
-      text: { en: 'Experience a Japanese summer classic together.', ja: '日本の夏の定番を、みんなで体験。' },
-    },
-    {
-      emoji: '⚽',
-      color: '#F59E8B',
-      photo: '',
-      title: { en: 'Sports events', ja: 'スポーツイベント' },
-      text: { en: 'Move, play, and get to know each other — no experience needed.', ja: '体を動かして自然に仲良く。初心者大歓迎。' },
-    },
-  ],
+// Events are shown newest first. Dates after today get an "Upcoming" badge.
+
+export type EventItem = {
+  date: string // YYYY-MM-DD
+  emoji: string
+  color: string
+  photo: string
+  title: T
+  place: T
+  text: T
+  link: string // Instagram post
 }
 
-// ⚠ SAMPLE NUMBERS — replace with real ones, then set `isSample: false`.
-export const numbers = {
-  title: { en: 'TISA in numbers', ja: '数字で見るTISA' },
-  isSample: true,
-  sampleNote: { en: 'Sample data', ja: 'サンプルデータ' },
-  followers: 897,
-  stats: [
-    { value: '897', label: { en: 'Instagram followers', ja: 'Instagramフォロワー' } },
-    { value: '52', label: { en: 'Weekly meetups a year', ja: '年間の定例活動' } },
-    { value: '4+', label: { en: 'Big events a year', ja: '年間の大型イベント' } },
+export const activities = {
+  title: { en: 'What we do', ja: '活動内容' },
+  lead: {
+    en: 'TISA turns international students’ “I’m stuck” and “I wish…” into real events.',
+    ja: 'TISAは、留学生の「困った」「こうだったらいいな」をイベントとして形にするサークルです。',
+  },
+  seeAll: { en: 'See all activities', ja: '活動をすべて見る' },
+  upcoming: { en: 'Upcoming', ja: '開催予定' },
+  more: { en: 'See on Instagram ↗', ja: 'Instagramで見る ↗' },
+
+  events: [
+    {
+      date: '2026-11-18',
+      emoji: '🎞️',
+      color: '#5BA4E6',
+      photo: '',
+      title: { en: 'MOVIEAT: “Weathering with You”', ja: 'MOVIEAT「天気の子」上映会' },
+      place: { en: 'OIC H221', ja: 'OIC H221' },
+      text: {
+        en: 'Watch Makoto Shinkai’s film together with popcorn and snacks. Talking is welcome — English or Japanese, any level.',
+        ja: 'ポップコーンや軽食を食べながら、新海誠監督の「天気の子」をみんなで観る会。おしゃべりOK、英語・日本語どちらでも大丈夫です。',
+      },
+      link: 'https://www.instagram.com/oictisa/p/Dfi3qk6ycSY/',
+    },
+    {
+      date: '2026-10-28',
+      emoji: '🎃',
+      color: '#F5A23B',
+      photo: '',
+      title: { en: 'TISA Halloween Night', ja: 'TISA ハロウィンナイト' },
+      place: { en: 'OIC Kitchen Field', ja: 'OIC キッチンフィールド' },
+      text: {
+        en: 'Mixed teams of international and Japanese students made glowing clay jack-o’-lanterns, winning materials in a Halloween quiz battle.',
+        ja: '留学生と日本人学生のチームで、粘土のジャック・オー・ランタンを制作。ハロウィンクイズに正解して材料をゲットしながら作りました。',
+      },
+      link: 'https://www.instagram.com/oictisa/p/DfDfc5eE0Lq/',
+    },
+    {
+      date: '2026-10-25',
+      emoji: '⚽',
+      color: '#7BC67E',
+      photo: '',
+      title: { en: 'International Sports Festival “Ritsu-do”', ja: '国際スポーツフェスティバル「Ritsu-do」' },
+      place: { en: 'Doshisha University Kyotanabe Campus', ja: '同志社大学 京田辺キャンパス' },
+      text: {
+        en: 'Ritsumeikan × Doshisha. Students from different universities and countries connected through sports — no English or sports skills needed.',
+        ja: '立命館×同志社。大学も国も越えて、スポーツで仲良くなるイベント。英語やスポーツが得意でなくても大丈夫。',
+      },
+      link: 'https://www.instagram.com/oictisa/p/DeGgrgLTZ9m/',
+    },
+    {
+      date: '2026-10-17',
+      emoji: '🍵',
+      color: '#9CCB8F',
+      photo: '',
+      title: { en: 'Tea Ceremony Experience in Gion', ja: '祇園で茶道体験' },
+      place: { en: 'Ocha to Haru, Gion, Kyoto', ja: '京都・祇園「お茶と春」' },
+      text: {
+        en: 'Up close with a real tea ceremony: the manners, and the spirit of caring for guests behind every movement. We also shared how guests are welcomed in each other’s countries.',
+        ja: '茶道の所作と、その一つひとつに込められた「相手を想う心」を間近で体験。それぞれの国のおもてなしについても語り合いました。',
+      },
+      link: 'https://www.instagram.com/oictisa/p/DewmVLXkw6U/',
+    },
+    {
+      date: '2026-10-03',
+      emoji: '🍳',
+      color: '#F59E8B',
+      photo: '',
+      title: { en: 'Potluck Party (TISA × BBP)', ja: 'ポットラックパーティー（TISA × BBP）' },
+      place: { en: 'OIC Kitchen Field (G Building 1F)', ja: 'OIC キッチンフィールド（G棟1F）' },
+      text: {
+        en: 'Dishes from many countries, plus four team games: World Trivia, Guess the Food, Guess the Celebrity and Language Challenge.',
+        ja: 'いろんな国の料理を持ち寄って、世界クイズ・料理当て・有名人当て・言語チャレンジの4つのゲームでチーム対抗戦。',
+      },
+      link: 'https://www.instagram.com/oictisa/p/DewBmbKE3pY/',
+    },
+  ] as EventItem[],
+}
+
+export const activitiesPage = {
+  kicker: { en: 'Activities', ja: '活動紹介' },
+  title: { en: 'From “I wish” to events.', ja: '「やりたい」を、イベントに。' },
+  lead: {
+    en: 'TISA is a student organization at Ritsumeikan OIC that supports international students. We listen to what students need, plan it together, and make it happen.',
+    ja: 'TISAは立命館大学OICの留学生支援団体です。留学生の声を聞いて、みんなで企画して、イベントとして実現します。',
+  },
+
+  flowTitle: { en: 'How an event is born', ja: 'イベントができるまで' },
+  flow: [
+    { icon: '👂', title: { en: 'Listen', ja: '声を集める' }, text: { en: 'Requests from this site, DMs and surveys.', ja: 'このサイトのリクエスト、DM、アンケートから。' } },
+    { icon: '🗓️', title: { en: 'Plan', ja: '企画する' }, text: { en: 'Members plan it at our Wednesday meetings.', ja: '毎週水曜の定例ミーティングで企画。' } },
+    { icon: '🤝', title: { en: 'Run it together', ja: 'みんなで開催' }, text: { en: 'International and Japanese students, side by side.', ja: '留学生と日本人学生が一緒に運営。' } },
+    { icon: '📸', title: { en: 'Share', ja: '発信する' }, text: { en: 'Reports and photos on Instagram.', ja: 'レポートと写真をInstagramで発信。' } },
   ],
-  chartTitle: { en: 'Event participants by year', ja: '年度別イベント参加者数' },
-  chart: [
-    { name: '2024', participants: 120 },
-    { name: '2025', participants: 180 },
-    { name: '2026', participants: 240 },
+
+  typesTitle: { en: 'Kinds of events', ja: 'こんなイベントをしています' },
+  types: [
+    { icon: '🍳', title: { en: 'Food & meetups', ja: '交流会・ごはん会' }, text: { en: 'Potlucks, welcome dinners, exchange meetups.', ja: 'ポットラック、歓迎ごはん会、交流会。' } },
+    { icon: '🍵', title: { en: 'Japanese culture', ja: '日本文化体験' }, text: { en: 'Tea ceremony and other hands-on experiences.', ja: '茶道などの体験型イベント。' } },
+    { icon: '🎃', title: { en: 'Seasonal events', ja: '季節のイベント' }, text: { en: 'Halloween, fireworks, training camp.', ja: 'ハロウィン、花火、合宿。' } },
+    { icon: '⚽', title: { en: 'Sports', ja: 'スポーツ' }, text: { en: 'Sports days, including with other universities.', ja: '他大学と合同のスポーツイベントも。' } },
+    { icon: '🎞️', title: { en: 'Movie nights', ja: '映画会' }, text: { en: 'Japanese films with snacks and chatting.', ja: '軽食を食べながら日本映画を鑑賞。' } },
+    { icon: '📚', title: { en: 'Study & festivals', ja: '勉強会・学祭' }, text: { en: 'English study sessions and school festival booths.', ja: '英語勉強会や学園祭への出店。' } },
   ],
+
+  eventsTitle: { en: 'Recent events', ja: '最近のイベント' },
+
+  joinTitle: { en: 'Join TISA', ja: 'TISAに入ろう' },
+  joinText: {
+    en: 'International students are TISA members too! No English skills needed — our regular activities (planning, surveys, meetings) are mainly in Japanese. Each semester we hold open trial sessions.',
+    ja: '留学生もTISAのメンバーとして活動しています！英語力は問いません。普段の活動（企画・アンケート・ミーティング）は日本語が中心です。毎学期、体験入部も開催しています。',
+  },
+  joinPoints: [
+    { en: 'Interested in international exchange', ja: '国際交流に興味がある' },
+    { en: 'Want to make friends from other countries', ja: '留学生と友だちになりたい' },
+    { en: 'Want to start something new at university', ja: '大学で新しいことを始めたい' },
+  ] as T[],
+  joinCta: { en: 'DM us on Instagram', ja: 'InstagramでDMする' },
+  requestCta: { en: 'Request an event', ja: 'イベントをリクエスト' },
+  back: { en: '← Back to home', ja: '← ホームに戻る' },
 }
 
 export const form = {
